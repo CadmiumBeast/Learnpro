@@ -19,7 +19,16 @@ class CourseController extends Controller
     public function show($id){
         $courses = Course::where('id', $id)->get();
 
+        $ins_id = auth('sanctum')->user()->id;
+        $entrollementStatus = Enrollment::where('course_id', $id)->where('user_id', $ins_id)->exists();
+
         return response()->json($courses);
+    }
+    public function checkEnrollment($id){
+        $ins_id = auth('sanctum')->user()->id;
+        $enrolledCourses = Enrollment::where('course_id', $id)->where('user_id', $ins_id)->exists();;
+
+        return response()->json($enrolledCourses);
     }
 
     public function store(Request $request){
@@ -67,12 +76,12 @@ class CourseController extends Controller
     public function unenroll($id){
         $student_id = auth('sanctum')->user()->id;
 
-        $student_enrollment = Enrollment::where('student_id', $student_id)->where('course_id', $id)->get();
+        $student_enrollment = Enrollment::where('user_id', $student_id)->where('course_id', $id)->get();
 
         $usertype = User::where('id', $student_id)->value('role');
 
         if ($usertype == 'student'){
-            $student_enrollment->delete();
+            $student_enrollment->each->delete();
 
             return response()->json(['message' => 'Unenrolled Successfully']);
         }

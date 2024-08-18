@@ -20,7 +20,7 @@ class LoginController extends BaseController
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->plainTextToken;
-            $success['name'] =  $user->name;
+            $success['role'] =  $user->role;
 
             return $this->sendResponse($success, 'User login successfully.');
         }

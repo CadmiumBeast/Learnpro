@@ -17,8 +17,9 @@ Route::prefix('v1')->group(function () {
         Route::get('/courses', 'index');
         Route::post('/courses', 'store');
         Route::get('/courses/{id}', 'show');
+        Route::get('/courses/{id}/checkEnrollment', 'checkEnrollment');
         Route::post('/courses/{id}/enroll', 'enroll');
-        Route::delete('/courses/{id}/unenroll', 'enroll');
+        Route::delete('/courses/{id}/unenroll', 'unenroll');
 
     });
 });
